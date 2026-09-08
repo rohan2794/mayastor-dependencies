@@ -73,7 +73,7 @@ pub mod snapshot {
 pub mod registration {
     pub use super::pb::{
         registration_client, ApiVersion, DeregisterRequest, MayastorBugFixes, MayastorFeatures,
-        RegisterRequest,
+        NvmfTargetInfo, RegisterRequest, TransportCaps,
     };
 }
 pub mod host {
@@ -84,8 +84,8 @@ pub mod host {
         BackCompatMayastorFeatures, BlockDevice, GetMayastorResourceUsageResponse,
         ListBlockDevicesRequest, ListBlockDevicesResponse, ListNvmeControllersResponse,
         MayastorBugFixes, MayastorFeatures, MayastorInfoResponse, NvmeController,
-        NvmeControllerIoStats, NvmeControllerState, ResourceUsage, StatNvmeControllerRequest,
-        StatNvmeControllerResponse,
+        NvmeControllerIoStats, NvmeControllerState, NvmfTargetInfo, ResourceUsage,
+        StatNvmeControllerRequest, StatNvmeControllerResponse, TransportCaps,
     };
 }
 

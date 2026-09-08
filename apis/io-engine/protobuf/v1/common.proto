@@ -15,7 +15,8 @@ message MayastorFeatures {
   optional bool logicalVolumeManager = 2;
   // SnapshotRebuild presence and enablement status.
   optional bool snapshotRebuild = 3;
-  // RDMA support for Mayastor nvmf target.
+  // RDMA support of the io-engine itself, which says nothing about rdma being
+  // usable on this node, see NvmfTargetInfo for that.
   optional bool rdmaCapableIoEngine = 4;
   // Diskpool encryption capability.
   optional bool diskpoolEncryption = 5;
@@ -24,6 +25,36 @@ message MayastorFeatures {
   uint32 nexus_label_version = 6;
   // The io-engine gRPC server has TLS enabled and expects TLS connections.
   optional bool grpcTls = 7;
+}
+
+// The transport capabilities of the node an io-engine runs on. Computed the
+// same way as the csi node does, so both report the same thing.
+message TransportCaps {
+  // RDMA HCA hardware is present on this node, which is the same thing
+  // ibv_devinfo reports, only asked straight to libibverbs.
+  bool rdmaHcaPresent = 1;
+  // The nvme_rdma kernel module is loaded on this node. Both this and
+  // rdmaHcaPresent are required for NVMe-oF RDMA to actually be usable.
+  // Note that the io-engine itself does not use it, as it does rdma from
+  // userspace, it only reports it for the node.
+  bool nvmeRdmaModuleLoaded = 2;
+}
+
+// The state of an io-engine's nvmf target.
+message NvmfTargetInfo {
+  // The network interface the target listens on, as specified through
+  // --nvmf-tgt-interface, unset if it wasn't.
+  optional string interface = 1;
+  // The address the target listens on, on the usual nexus and replica ports.
+  string address = 2;
+  // Whether the target is listening over tcp. Set means it was asked for,
+  // the value says whether it panned out.
+  optional bool tcp = 3;
+  // Whether the target is listening over rdma, which is what makes rdma
+  // usable. Unset means rdma wasn't asked for, false means it was but spdk
+  // couldn't do it: no rdma support built in, no usable rdma devices, or the
+  // listeners failed to bind.
+  optional bool rdma = 4;
 }
 
 message MayastorBugFixes {
