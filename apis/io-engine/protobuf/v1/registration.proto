@@ -24,6 +24,10 @@ message RegisterRequest {
   optional MayastorBugFixes bugfixes = 7;
   // Version of mayastor.
   optional string version = 8;
+  // The state of the nvmf target.
+  optional NvmfTargetInfo nvmfTarget = 9;
+  // The transport capabilities of the node this instance runs on.
+  optional TransportCaps transportCaps = 10;
 }
 
 // api version supported by the dataplane

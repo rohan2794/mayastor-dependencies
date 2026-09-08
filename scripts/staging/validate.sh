@@ -10,7 +10,7 @@ CHART_VALIDATE="false"
 TRIGGER=""
 TAG=""
 
-# --- Parse arguments --- 
+# --- Parse arguments ---
 for ((i=1; i <= $#; i++)); do
   case "${!i}" in
     --chart)
@@ -104,8 +104,8 @@ fi
 echo "Validating tag: $TAG"
 case "$TRIGGER" in
     release|staging)
-        [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$ ]] \
-            || log_fatal "❌ Tag must be in format vX.Y.Z or vX.Y.Z-rc.N"
+        [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] \
+            || log_fatal "❌ Tag must be in format vX.Y.Z or vX.Y.Z-<suffix>"
         ;;
     develop)
         [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-develop$ ]] \
