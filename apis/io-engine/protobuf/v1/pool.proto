@@ -19,8 +19,8 @@ service PoolRpc {
 
   rpc ListPools (ListPoolOptions) returns (ListPoolsResponse) {}
 
-  // Retrieve SMART / health information for the disk(s) backing a pool.
-  rpc GetPoolHealth (GetPoolHealthRequest) returns (GetPoolHealthResponse) {}
+  // Retrieve SMART / health information for the disk(s) backing pool(s).
+  rpc ListPoolHealth (ListPoolHealthOptions) returns (ListPoolHealthResponse) {}
 
   rpc GrowPool (GrowPoolRequest) returns (GrowPoolResponse) {}
   rpc GrowPoolV2 (GrowPoolRequest) returns (Pool) {}
@@ -185,9 +185,10 @@ message ListPoolsResponse {
   repeated Pool pools = 1;  // list of the pools
 }
 
-message GetPoolHealthRequest {
-  string name = 1;                        // name of the pool
-  google.protobuf.StringValue uuid = 2;   // optional uuid for the pool
+message ListPoolHealthOptions {
+  google.protobuf.StringValue name = 1;   // list health for the pool matching the name if provided
+  PoolTypeValue pooltype = 2;             // optional pooltype filter
+  google.protobuf.StringValue uuid = 3;   // list health for the pool matching the uuid if provided
 }
 
 // Device identity/inventory data. Static for the device's lifetime, so
@@ -267,8 +268,15 @@ message DiskHealth {
   optional string error = 4;            // populated with the failure reason when !supported
 }
 
-message GetPoolHealthResponse {
-  repeated DiskHealth disks = 1;        // one entry per disk backing the pool
+// Health for all disks backing a single pool.
+message PoolHealth {
+  string name = 1;                        // pool name
+  string uuid = 2;                        // pool uuid
+  repeated DiskHealth disks = 3;          // one entry per disk backing the pool
+}
+
+message ListPoolHealthResponse {
+  repeated PoolHealth pools = 1;          // health for each matched pool
 }
 
 message ListPoolOptions {
